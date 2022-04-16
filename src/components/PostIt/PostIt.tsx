@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ContentEditable from "react-contenteditable";
 
-import { DeleteButton } from "../Buttons";
-import { EditButton } from "../Buttons";
-import { ShareButton } from "../Buttons/ShareButton";
+import { DeleteButton, EditButton, ShareButton } from "../Buttons";
 
+import { NotesContext } from "../../contexts/NotesContext";
+import { api } from "../../utils/api";
 import { frames } from "./helpers";
 import { PostItProps } from "./interfaces";
 import { PostItContainer } from "./styles";
@@ -12,17 +12,35 @@ import { PostItContainer } from "./styles";
 export const PostIt = (props: PostItProps) => {
   const { content, _id, isNew } = props;
   const [isEditing, setIsEditing] = useState<boolean>(Boolean(isNew));
+  const { setNotes } = useContext(NotesContext);
   const ref = useRef<HTMLInputElement>(null);
-
   const frame = useMemo(
     () => frames[Math.floor(Math.random() * frames.length)],
     []
   );
 
+  async function handleBlur() {
+    if (ref.current?.innerText) {
+      try {
+        const res = await api.put(`/postits/${_id}`, {
+          content: ref.current?.innerText,
+        });
+        setNotes((currNotes) => {
+          const newNotes = [...currNotes];
+          const index = newNotes.findIndex((n) => n._id === _id);
+          newNotes[index] = res.data;
+          return newNotes;
+        });
+        setIsEditing(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   useEffect(() => {
     if (isEditing) {
       ref.current?.focus();
-      // ref.current?.select();
     }
   }, [isEditing]);
 
@@ -42,7 +60,7 @@ export const PostIt = (props: PostItProps) => {
         html={content}
         disabled={!isEditing}
         onChange={() => console.log("alo)")}
-        onBlur={() => setIsEditing(false)}
+        onBlur={handleBlur}
         tagName="p"
         className="content"
       />

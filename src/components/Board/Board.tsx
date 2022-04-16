@@ -1,24 +1,32 @@
 import { useContext, useEffect } from "react";
 
 import { PostIt } from "../PostIt";
+import { AddPostIt } from "../AddPostIt";
 
 import { NotesContext } from "../../contexts/NotesContext";
-import { initialNotes } from "../../utils/notes";
+import { api } from "../../utils/api";
+
 import { BoardContainer } from "./styles";
-import { AddPostIt } from "../AddPostIt";
 
 export const Board = () => {
   const { notes, setNotes } = useContext(NotesContext);
 
   useEffect(() => {
-    setNotes(initialNotes);
+    async function fetchNotes() {
+      try {
+        const res = await api.get("/postits");
+        setNotes(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchNotes();
   }, [setNotes]);
 
   return (
     <BoardContainer>
-      {notes.map((n) => (
-        <PostIt key={n._id} {...n} />
-      ))}
+      {notes.map((n) => n.content && <PostIt key={n._id} {...n} />)}
       <AddPostIt />
     </BoardContainer>
   );

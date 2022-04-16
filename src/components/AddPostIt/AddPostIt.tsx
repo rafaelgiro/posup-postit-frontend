@@ -1,13 +1,19 @@
 import { useContext } from "react";
 import { NotesContext } from "../../contexts/NotesContext";
+import { api } from "../../utils/api";
 import { defaultNote } from "./helpers";
 import { AddPostItButton } from "./styles";
 
 export const AddPostIt = () => {
   const { setNotes } = useContext(NotesContext);
 
+  async function addNote() {
+    const res = await api.post("/postits", defaultNote);
+    setNotes((prevNotes) => [...prevNotes, res.data]);
+  }
+
   return (
-    <AddPostItButton onClick={() => setNotes((curr) => [...curr, defaultNote])}>
+    <AddPostItButton onClick={addNote}>
       <svg viewBox="0 0 510 511" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M9.19982 500.88C-3.00018 328.78 7.43982 160.5 4.37982 7.54003M8.61982 9.02003C123.78 1.84003 244.92 -0.17997 494.88 11.68L8.61982 9.02003ZM507.04 7.16003C503.54 139.16 492.7 266.66 496.86 505.34L507.04 7.16003ZM500.68 499.96C367.86 504.12 239 510.9 1.31982 506.1L500.68 499.96Z"

@@ -1,12 +1,27 @@
+import { useContext } from "react";
+
+import { NotesContext } from "../../contexts/NotesContext";
+import { api } from "../../utils/api";
+
 import { ButtonProps } from "./interfaces";
 import { ActionButton } from "./styles";
 
 export const DeleteButton = (props: ButtonProps) => {
   const { id } = props;
+  const { setNotes } = useContext(NotesContext);
 
-  function handleDelete() {
-    // todo: chamada de API
-    console.log(id);
+  async function handleDelete() {
+    try {
+      await api.delete(`/postits/${id}`);
+      setNotes((currNotes) => {
+        const newNotes = [...currNotes];
+        const index = newNotes.findIndex((n) => n._id === id);
+        newNotes.splice(index, 1);
+        return newNotes;
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
