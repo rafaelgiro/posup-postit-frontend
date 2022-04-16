@@ -10,7 +10,7 @@ import { PostItProps } from "./interfaces";
 import { PostItContainer } from "./styles";
 
 export const PostIt = (props: PostItProps) => {
-  const { content, id, isNew } = props;
+  const { content, _id, isNew } = props;
   const [isEditing, setIsEditing] = useState<boolean>(Boolean(isNew));
   const ref = useRef<HTMLInputElement>(null);
 
@@ -48,9 +48,13 @@ export const PostIt = (props: PostItProps) => {
       />
 
       <div className="controls">
-        <DeleteButton id={id} />
-        <EditButton id={id} setIsEditing={setIsEditing} isEditing={isEditing} />
-        <ShareButton id={id} />
+        <DeleteButton id={_id} />
+        <EditButton
+          id={_id}
+          setIsEditing={setIsEditing}
+          isEditing={isEditing}
+        />
+        <ShareButton id={_id} />
       </div>
     </PostItContainer>
   );

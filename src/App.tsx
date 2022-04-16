@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ThemeProvider } from "@emotion/react";
-import { PostIt } from "./components/PostIt";
 import { Board } from "./components/Board";
+import { NotesProvider } from "./contexts/NotesContext";
 
 const lightTheme = {
   themeName: "light",
@@ -27,28 +27,15 @@ const darkTheme = {
 
 const App = () => {
   const [isDark, setIsDark] = useState(false);
-
   const theme = isDark
     ? { ...darkTheme, setIsDark }
     : { ...lightTheme, setIsDark };
 
   return (
     <ThemeProvider theme={theme}>
-      <Board>
-        <PostIt content="Hello World" id={0} />
-        <PostIt content="Beijo no jandinho" id={0} />
-        <PostIt content="hiupsajkelashuifjksaesa" id={0} />
-        <PostIt content="sajfsklakdkopsadsa" id={0} />
-        <PostIt
-          content="asehiuuasijo  haisujkel hiufjklsah iuejskal eas"
-          id={0}
-        />
-        <PostIt content=" saejhas lnkfhsa ejklsah fiuasjkl ehaiufjksa" id={0} />
-        <PostIt
-          content="lorem aiuphsejklasiuphfsajklhasi hsaj eisua kjeahs alsh eiuas jke"
-          id={0}
-        />
-      </Board>
+      <NotesProvider>
+        <Board />
+      </NotesProvider>
     </ThemeProvider>
   );
 };

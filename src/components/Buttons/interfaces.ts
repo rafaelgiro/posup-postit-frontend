@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface ButtonProps {
-  id: number;
+  id: string;
 }
 
 export interface EditButtonProps extends ButtonProps {
