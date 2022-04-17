@@ -7,7 +7,7 @@ import { NotesContext } from "../../contexts/NotesContext";
 import { api } from "../../utils/api";
 import { frames } from "./helpers";
 import { PostItProps } from "./interfaces";
-import { PostItContainer } from "./styles";
+import { PostItContainer, PostItControls } from "./styles";
 
 export const PostIt = (props: PostItProps) => {
   const { content, _id, isNew } = props;
@@ -65,7 +65,7 @@ export const PostIt = (props: PostItProps) => {
         className="content"
       />
 
-      <div className="controls">
+      <PostItControls className="controls" isEditing={isEditing}>
         <DeleteButton id={_id} />
         <EditButton
           id={_id}
@@ -73,7 +73,7 @@ export const PostIt = (props: PostItProps) => {
           isEditing={isEditing}
         />
         <ShareButton id={_id} />
-      </div>
+      </PostItControls>
     </PostItContainer>
   );
 };

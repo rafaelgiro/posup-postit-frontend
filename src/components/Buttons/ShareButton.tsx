@@ -1,12 +1,22 @@
+import { apiExport } from "../../utils/api";
 import { ButtonProps } from "./interfaces";
 import { ActionButton } from "./styles";
 
 export const ShareButton = (props: ButtonProps) => {
   const { id } = props;
 
-  function handleShare() {
-    // todo: chamada de API
-    console.log(id);
+  async function handleShare() {
+    try {
+      const res = await apiExport.get(`/file/${id}`);
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "postit.txt");
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

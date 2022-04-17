@@ -43,3 +43,12 @@ export const PostItContainer = styled.div<{ isEditing: boolean }>`
     }
   }
 `;
+
+export const PostItControls = styled.div<{ isEditing: boolean }>`
+  ${({ isEditing }) =>
+    isEditing &&
+    css`
+      opacity: 0;
+      pointer-events: none;
+    `}
+`;
